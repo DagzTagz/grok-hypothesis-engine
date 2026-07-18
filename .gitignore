@@ -1,0 +1,87 @@
+# Secrets & credentials (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.secret
+secrets/
+credentials/
+.aws/
+.gnupg/
+*.token
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Logs & local state
+*.log
+logs/
+tmp/
+temp/
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.tox/
+.nox/
+
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.next/
+.nuxt/
+.turbo/
+coverage/
+
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# Go
+bin/
+*.exe
+*.test
+*.out
+
+# Nix
+result
+result-*
+
+# Local tooling
+.direnv/
+.mise.toml.local
