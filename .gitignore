@@ -11,6 +11,9 @@ id_ed25519*
 *.secret
 secrets/
 credentials/
+credentials.json
+*.credentials.json
+.xai_api_key
 .aws/
 .gnupg/
 *.token
