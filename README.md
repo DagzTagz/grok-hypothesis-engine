@@ -88,7 +88,7 @@ You don’t need to be a professional programmer to help. Contributions can incl
 - Helping with scientific domain knowledge
 - Writing examples and test cases
 
-See `CONTRIBUTING.md` (coming soon) for guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 Even if you just want to follow along or ask questions, feel free to open an issue.
 
