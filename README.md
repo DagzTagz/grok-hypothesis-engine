@@ -2,7 +2,7 @@
 
 **An open-source, community-driven system for generating, verifying, and testing scientific hypotheses — built in collaboration with Grok (xAI).**
 
-The goal of this project is to create a transparent, auditable AI tool that helps researchers and curious minds propose novel scientific hypotheses, rigorously check them against existing knowledge, and suggest practical ways to test them.
+The goal of this project is to create a transparent, auditable AI tool that helps researchers and curious minds propose novel scientific hypotheses, act as a peer adversary to rigorously check them against existing knowledge, and suggest practical ways to test them.
 
 This project is inspired by xAI’s mission to advance our understanding of the universe through maximally truth-seeking AI.
 
@@ -16,7 +16,7 @@ We want to build an AI system that acts like a thoughtful scientific collaborato
 
 - Proposes interesting, testable hypotheses grounded in real science
 - Critically verifies those hypotheses for consistency and plausibility
-- Suggests concrete experiments or simulations
+- Suggests concrete experiments or simulations to personally test hypothesis against criticisms of hypothesis
 - Maintains a clear, auditable record of its reasoning
 
 The long-term vision is a multi-agent system that can assist with real scientific discovery while staying honest about what it knows and doesn’t know.
@@ -39,9 +39,9 @@ The long-term vision is a multi-agent system that can assist with real scientifi
 1. You give the system a scientific topic or research area
 2. It retrieves relevant background information
 3. It generates one or more hypotheses
-4. It verifies each hypothesis for scientific consistency
+4. It verifies each hypothesis for scientific consistency (thinking adversarially)
 5. It suggests ways to test the hypothesis (experiments or code simulations)
-6. Everything is output in a clear, structured format with reasoning
+6. Everything is output in a clear, structured format with reasoning (avoids black box reasoning)
 
 ---
 
@@ -57,7 +57,7 @@ We’re keeping things as simple as possible during Phase 1.
 
 ### Option 2: Using Grok Build (for faster development)
 
-Since Grok Build (xAI’s open-source coding agent) is now available, many contributors are using it to help build and extend this project.
+Since Grok Build (xAI’s open-source coding agent) is now available, contributors are using it to help build and extend this project.
 
 ---
 
