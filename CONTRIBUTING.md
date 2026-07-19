@@ -1,6 +1,8 @@
-# Contributing to Grok Hypothesis Engine
+# Contributing to DagzTagz Hypothesis Engine
 
-Thank you for your interest in contributing. This project is an **open community effort** to build a transparent, auditable tool for generating, verifying, and testing scientific hypotheses.
+Thank you for your interest in contributing. This project is an **open community effort** under the **DagzTagz** brand to build a transparent, auditable tool for generating, verifying, and testing scientific hypotheses.
+
+**Powered by Grok (xAI)** in live mode — not an official xAI product.
 
 You do **not** need to be a professional programmer to help. Careful thinking, clear writing, scientific judgment, and good bug reports all count.
 
@@ -12,7 +14,7 @@ This is a community project and is **not** an official product of xAI.
 
 1. Read the [README](README.md) for vision, Phase 1 scope, and roadmap.  
 2. Skim [SECURITY.md](SECURITY.md) so you know how to handle secrets and vulnerability reports.  
-3. Check [open issues](https://github.com/DagzTagz/grok-hypothesis-engine/issues) for something that matches your interest.  
+3. Check [open issues](https://github.com/DagzTagz/dagztagz-hypothesis-engine/issues) for something that matches your interest.  
 4. For **large** changes (new architecture, new major feature, changing license or scope), open an issue first and wait for maintainer feedback before a big PR.
 
 Small fixes (typos, docs clarity, obvious bugs) can go straight to a pull request.
@@ -52,8 +54,8 @@ If you are unsure where you fit, open an issue with the label idea “question�
 The MVP is still early. When runnable code exists, setup steps will live in `getting-started.md`. Until then:
 
 ```bash
-git clone https://github.com/DagzTagz/grok-hypothesis-engine.git
-cd grok-hypothesis-engine
+git clone https://github.com/DagzTagz/dagztagz-hypothesis-engine.git
+cd dagztagz-hypothesis-engine
 ```
 
 - Work on a **branch**, not directly on `main`, if you have write access. Most people use a **fork + PR**.  

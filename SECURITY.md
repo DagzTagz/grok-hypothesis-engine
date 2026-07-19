@@ -1,8 +1,8 @@
 # Security Policy
 
-Thank you for helping keep **Grok Hypothesis Engine** and its users safe. We take security seriously, even while the project is early.
+Thank you for helping keep **DagzTagz Hypothesis Engine** and its users safe. We take security seriously, even while the project is early.
 
-This is a community open-source project and is **not** an official product of xAI.
+This is a **DagzTagz** community project. It is **powered by Grok (xAI)** when used with the live API, and is **not** an official product of xAI.
 
 ---
 
@@ -47,9 +47,9 @@ If you are unsure, report it privately anyway — we would rather triage once th
 ### Preferred: GitHub Security Advisories (private)
 
 1. Open the repository on GitHub:  
-   https://github.com/DagzTagz/grok-hypothesis-engine  
+   https://github.com/DagzTagz/dagztagz-hypothesis-engine  
 2. Go to **Security → Advisories → Report a vulnerability**  
-   (or use: https://github.com/DagzTagz/grok-hypothesis-engine/security/advisories/new )  
+   (or use: https://github.com/DagzTagz/dagztagz-hypothesis-engine/security/advisories/new )  
 3. Include as much detail as you can (see “What to include” below).
 
 This keeps the report private until we publish a fix or coordinated disclosure.
@@ -60,7 +60,7 @@ If you cannot use GitHub Advisories, email:
 
 **dagztagz369@proton.me**
 
-Subject line suggestion: `[SECURITY] grok-hypothesis-engine …`
+Subject line suggestion: `[SECURITY] dagztagz-hypothesis-engine …`
 
 Do **not** send secrets you found in a public channel. If a live key was exposed, say *that a key was exposed* and rotate it yourself if you own it; we can coordinate redaction separately.
 

@@ -58,6 +58,10 @@ build/
 *.egg-info/
 .tox/
 .nox/
+.python-version
+uv.lock
+out.json
+*.jsonl
 
 # Node / JS
 node_modules/
