@@ -106,11 +106,37 @@ The long-term vision is a multi-agent system that can assist with real scientifi
 
 ### Live mode (only after dry-run works — **costs money**)
 
+**1. Create a private secrets file** (once):
+
 ```bash
 cp .env.example .env
-# edit .env → set XAI_API_KEY=...
+```
 
-# WARNING: this line bills your xAI account — omit --dry-run on purpose
+**2. Add your xAI key to `.env`**
+
+**Linux / Terminal (nano — recommended):**
+
+```bash
+nano .env
+```
+
+Make sure you have this line (paste your real key only on your machine):
+
+```text
+XAI_API_KEY=paste_your_key_here
+```
+
+Save and exit nano: **Ctrl+O**, then **Enter**, then **Ctrl+X**.
+
+**Windows / Mac (backup if you don’t use nano):** open `.env` in Notepad, TextEdit, or VS Code, add the same line, save the file.
+
+- No spaces around `=` · prefer no quotes · never commit `.env`  
+- Optional: `chmod 600 .env`  
+- Full detail: **[getting-started.md — Configure secrets](getting-started.md#configure-secrets)**
+
+**3. Run live** (bills your xAI account; type `YES` unless you pass `-y`):
+
+```bash
 hypothesis-engine "effects of microplastics on soil microbiomes" -n 2
 ```
 

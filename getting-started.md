@@ -42,20 +42,71 @@ If `hypothesis-engine` is not found after install, confirm the venv is active an
 
 ## Configure secrets
 
+Your secret keys go in a small private file named **`.env`** in the project folder.  
+Think of it as a **password file only on your computer** — never upload it to GitHub or paste it into chat.
+
+### Step 1 — create the file from the template
+
+In the project folder (with your terminal open there):
+
 ```bash
 cp .env.example .env
-# edit .env and set XAI_API_KEY=...
 ```
 
-Never commit `.env`. It is gitignored.
+### Step 2 — put your xAI key in `.env`
 
-You can also:
+#### Option A — nano (recommended for Linux / Terminal)
+
+**nano** is a simple text editor that runs in the terminal. Great default on Ubuntu and similar systems.
+
+```bash
+nano .env
+```
+
+1. Find the line that looks like `XAI_API_KEY=` (or add it if missing).  
+2. Paste your key so the line looks like:
+
+```text
+XAI_API_KEY=paste_your_key_here
+```
+
+3. **Save and quit nano** (important — these keys are for nano, not the shell):
+   - Hold **Ctrl** and press **O** (letter O = “write Out” / save)  
+   - Press **Enter** to confirm the filename  
+   - Hold **Ctrl** and press **X** (exit)
+
+You should be back at the normal terminal prompt.
+
+#### Option B — not using Linux Terminal? (backup)
+
+Use **any** normal text editor:
+
+| System | Easy options |
+|--------|----------------|
+| **Windows** | Open the project folder in File Explorer → right‑click `.env` → Open with **Notepad** (or VS Code) |
+| **Mac** | Open `.env` in **TextEdit**, or VS Code |
+| **Linux desktop** | Double‑click `.env` / open with **Text Editor** (Gedit), or VS Code (`code .env`) |
+
+Make the same line as above (`XAI_API_KEY=...`), save the file, then return to the terminal.
+
+### Step 3 — rules (read once)
+
+- No spaces around `=`  
+- Prefer **no quotes** around the key  
+- **Never commit** `.env` (git already ignores it)  
+- On Linux/macOS, optional lock-down so only you can read it:
+
+```bash
+chmod 600 .env
+```
+
+### Alternative (one terminal session only — less ideal)
 
 ```bash
 export XAI_API_KEY=your_key_here
 ```
 
-Prefer `.env` so the key is less likely to end up in shell history.
+Prefer `.env` so the key is less likely to stick around in shell history.
 
 ## Run (offline dry-run — no API key, $0 cost)
 
@@ -145,22 +196,28 @@ pip install -e ".[audit]"
 
 (Developers using `pip install -e ".[dev]"` already get this.)
 
-**Step 2 — set a secret in `.env`** (never commit this file):
+**Step 2 — set a secret in `.env`** (never commit this file)
+
+Same idea as [Configure secrets](#configure-secrets).
+
+**Linux / Terminal (nano — recommended):**
 
 ```bash
 nano .env
 ```
 
-Add a long random passphrase **on its own line**, for example:
+Add a long random passphrase **on its own line** (this is **not** your xAI API key):
 
 ```text
 AUDIT_LOG_KEY=replace-with-a-long-random-passphrase
 ```
 
-Save and exit (`Ctrl+O`, Enter, `Ctrl+X` in nano).
+Save and exit nano: **Ctrl+O**, **Enter**, **Ctrl+X**.
 
-The CLI loads `.env` automatically for `AUDIT_LOG_KEY` (same idea as other env settings).  
-If the key is missing or blank, the log stays **hash-only** (what you saw if encryption did not engage).
+**Windows / Mac / desktop editors:** open `.env` in Notepad, TextEdit, or VS Code and add the same line, then save.
+
+The CLI loads `.env` automatically for `AUDIT_LOG_KEY`.  
+If the key is missing or blank, the log stays **hash-only**.
 
 **Step 3 — run with audit log** (from the project directory, venv on):
 
