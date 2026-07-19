@@ -140,6 +140,9 @@ Save and exit nano: **Ctrl+O**, then **Enter**, then **Ctrl+X**.
 hypothesis-engine "effects of microplastics on soil microbiomes" -n 2
 ```
 
+After **YES**, **wait** — the tool makes multiple xAI calls and prints progress (`[1/6] …`).  
+**Do not type** until results appear (use Ctrl+C only to cancel).
+
 Live runs are **powered by Grok (xAI)**. Output is attributed accordingly; still not an official xAI product.
 
 ### Optional local audit log (privacy is **your** local choice)

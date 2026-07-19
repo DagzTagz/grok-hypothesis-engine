@@ -136,6 +136,13 @@ You will be asked to type **`YES`** to confirm charges (an estimated API call co
 - Skip the prompt only if you accept charges in scripts: add `-y` / `--yes`
 - Non-interactive sessions **refuse** live mode without `--yes` (use `--dry-run` instead)
 
+**After you type YES — please wait:**
+
+- Live mode makes **several** xAI calls (background → generate → verify each → tests). This often takes **a while** (sometimes minutes).
+- You will see progress lines such as `[1/6] …` as steps finish.
+- **Do not type anything** while it runs (typing will not make it faster). Use **Ctrl+C** only if you need to cancel.
+- When finished, you will see a short “Done waiting” message, then the report.
+
 **Warning:** live mode bills **your** xAI account (multiple API calls per run). Dry-run first.
 
 ## Optional local audit log (privacy choices)

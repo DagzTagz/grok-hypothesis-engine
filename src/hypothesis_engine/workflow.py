@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from typing import Any
 
 from openai import OpenAI
@@ -34,6 +35,7 @@ def run_workflow(
     settings: Settings | None = None,
     client: OpenAI | None = None,
     dry_run: bool = False,
+    on_progress: Callable[[str], None] | None = None,
 ) -> HypothesisBundle:
     """Run the full Phase 1 pipeline for a topic.
 
@@ -45,6 +47,8 @@ def run_workflow(
         How many hypotheses to propose (kept small for cost/clarity).
     dry_run:
         If True, return deterministic mock output without calling the API.
+    on_progress:
+        Optional callback for human-readable step updates (e.g. CLI spinner text).
     """
     topic = topic.strip()
     if not topic:
@@ -52,24 +56,47 @@ def run_workflow(
     if n_hypotheses < 1 or n_hypotheses > 5:
         raise ValueError("n_hypotheses must be between 1 and 5")
 
+    def _progress(message: str) -> None:
+        if on_progress is not None:
+            on_progress(message)
+
     settings = settings or get_settings()
 
     if dry_run:
+        _progress("Dry-run: building mock results (no network)…")
         return _mock_bundle(topic, n_hypotheses)
 
     client = client or build_client(settings)
     model = settings.xai_model
+    total = estimate_api_calls(n_hypotheses)
+    step = 0
 
+    def _tick(label: str) -> None:
+        nonlocal step
+        step += 1
+        _progress(f"[{step}/{total}] {label}")
+
+    _tick("Calling xAI for background brief (this can take a while)…")
     background = _step_background(client, model, topic)
+    _progress("Background brief received.")
+
+    _tick("Generating hypotheses (please wait; do not type)…")
     hypotheses = _step_generate(client, model, topic, background, n_hypotheses)
+    _progress(f"Generated {len(hypotheses)} hypothesis(es).")
 
     verifications: list[VerificationResult] = []
     tests: list[SuggestedTest] = []
     for hyp in hypotheses:
+        _tick(f"Adversarially verifying {hyp.id}…")
         ver = _step_verify(client, model, topic, background, hyp)
         verifications.append(ver)
-        tests.extend(_step_tests(client, model, topic, hyp, ver))
+        _progress(f"{hyp.id} verification done ({ver.verdict.value}).")
 
+        _tick(f"Suggesting tests for {hyp.id}…")
+        tests.extend(_step_tests(client, model, topic, hyp, ver))
+        _progress(f"{hyp.id} test suggestions done.")
+
+    _progress("All API steps finished. Assembling report…")
     overall = _overall_notes(hypotheses, verifications)
     return HypothesisBundle(
         topic=topic,

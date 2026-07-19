@@ -115,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
                 },
             )
             return 2
+        _print_live_wait_banner(err, estimated=estimated, n=n)
 
     _audit(
         args.audit_log,
@@ -128,11 +129,16 @@ def main(argv: list[str] | None = None) -> int:
         },
     )
 
+    def _progress(message: str) -> None:
+        # stderr so --json-only stdout stays clean
+        err.print(f"[cyan]…[/cyan] {message}")
+
     try:
         bundle = run_workflow(
             topic,
             n_hypotheses=n,
             dry_run=dry_run,
+            on_progress=None if args.json_only and dry_run else _progress,
         )
     except Exception as exc:  # noqa: BLE001 — CLI boundary
         message = _friendly_error(exc)
@@ -148,6 +154,9 @@ def main(argv: list[str] | None = None) -> int:
             },
         )
         return 1
+    else:
+        if not dry_run:
+            err.print("[green]Done waiting — printing results below.[/green]")
 
     payload = bundle_to_json(bundle)
     if args.output:
@@ -223,7 +232,10 @@ def _confirm_live(
         return False
 
     try:
-        answer = input("Type YES to spend credits on a live run (anything else aborts): ")
+        answer = input(
+            "Type YES to spend credits on a live run (anything else aborts).\n"
+            "After YES, please wait — do not type until results appear: "
+        )
     except EOFError:
         console.print("[red]No input; aborting live run.[/red]")
         return False
@@ -233,6 +245,23 @@ def _confirm_live(
 
     console.print("[yellow]Aborted. No API calls made. Use --dry-run for a free mock run.[/yellow]")
     return False
+
+
+def _print_live_wait_banner(console: Console, *, estimated: int, n: int) -> None:
+    """Tell the user a long multi-call run is in progress; discourage extra input."""
+    console.print(
+        Panel.fit(
+            "[bold yellow]Please wait — live run in progress[/bold yellow]\n\n"
+            f"About [bold]~{estimated}[/bold] xAI API calls for [bold]{n}[/bold] hypothesis(es).\n"
+            "Each step can take [bold]tens of seconds[/bold] (sometimes longer).\n"
+            "Progress lines will appear below as steps finish.\n\n"
+            "[bold]Do not type anything[/bold] until you see results "
+            "(extra keypresses will not speed this up).\n"
+            "If you need to cancel, use [cyan]Ctrl+C[/cyan] once.",
+            title="Working…",
+            border_style="yellow",
+        )
+    )
 
 
 def _friendly_error(exc: BaseException) -> str:
