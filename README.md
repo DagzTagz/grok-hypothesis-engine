@@ -147,6 +147,8 @@ hypothesis-engine --dry-run "my topic" --audit-log audit.jsonl
 pip install -e ".[audit]"
 # add AUDIT_LOG_KEY=... to .env  (never commit .env)
 hypothesis-engine --dry-run "my topic" --audit-log audit.jsonl
+# expect topic_storage=encrypted and topic_encrypted=... in audit.jsonl
+# full encrypt + decrypt test steps: getting-started.md (Mode B, Steps 1–4)
 
 # C) Explicit plaintext in the log (avoid for sensitive topics)
 hypothesis-engine --dry-run "my topic" --audit-log audit.jsonl --audit-include-topic

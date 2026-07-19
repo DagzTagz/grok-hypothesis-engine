@@ -175,7 +175,44 @@ cat audit.jsonl
 **Success looks like:** `"topic_storage": "encrypted"` and a `"topic_encrypted": "gAAAA..."` field.  
 **Hash-only** (`"topic_storage": "hash_only"`) means `AUDIT_LOG_KEY` was not set/loaded — fix `.env` and re-run.
 
+Optional quick checks (do **not** print your key):
+
+```bash
+# plaintext topic should NOT appear in the file
+grep -F "my topic" audit.jsonl || echo "Good: plaintext topic not in log"
+
+# storage mode should say encrypted
+grep -F 'topic_storage' audit.jsonl
+```
+
 **Fail closed:** if `AUDIT_LOG_KEY` is set but `[audit]` is **not** installed, the CLI **exits with install instructions**. It will **not** silently write hash-only while you thought encryption was on.
+
+**Step 4 — test decryption** (proves you can recover the topic with the same key)
+
+This is a small **Python** script. Paste the **whole block** into the terminal (not line-by-line as bash).  
+`load_dotenv(...)` is **Python**, not a bash command.
+
+```bash
+cd dagztagz-hypothesis-engine
+source .venv/bin/activate
+python - <<'PY'
+from hypothesis_engine.audit import decrypt_topic
+import json, os
+from dotenv import load_dotenv
+
+# Use an explicit path so this works with "python - <<'PY'" (stdin scripts).
+load_dotenv(".env")
+
+secret = os.environ["AUDIT_LOG_KEY"]
+row = json.loads(open("audit.jsonl").readline())
+print(decrypt_topic(row["topic_encrypted"], secret))
+PY
+```
+
+**Success:** the terminal prints your original topic (e.g. `my topic` or whatever you used in Step 3).  
+**This does not write the key into the repo** — it only prints the decrypted topic. Keep `.env` private (`chmod 600 .env` recommended).
+
+If you see `AssertionError` from `load_dotenv`, you likely ran `load_dotenv(...)` alone in bash, or need `load_dotenv(".env")` with an explicit path as above.
 
 ### Mode C — Plaintext topic (explicit opt-in, least private)
 
