@@ -296,11 +296,17 @@ def _friendly_error(exc: BaseException) -> str:
             "and use --dry-run until resolved."
         )
 
-    if name == "LLMError" or "could not parse json" in lowered:
+    if (
+        name in {"LLMError", "JSONDecodeError"}
+        or "could not parse json" in lowered
+        or "invalid \\escape" in lowered
+        or "invalid escape" in lowered
+    ):
         return (
-            f"Model response was not usable JSON ({name}). "
-            "Try again, or lower -n. Details: "
-            f"{text[:300]}"
+            "The model returned text that was not valid JSON "
+            "(often a bad backslash in a long explanation). "
+            "Please run the same command again — the client will retry once automatically. "
+            f"Details: {text[:280]}"
         )
 
     # Avoid dumping huge traces; never echo env values

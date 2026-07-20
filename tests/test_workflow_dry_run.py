@@ -29,6 +29,14 @@ def test_parse_json_with_fences():
     assert parse_json_object(text) == {"a": 1}
 
 
+def test_parse_json_repairs_invalid_backslash_escape():
+    # Models often emit \s or \path inside strings — invalid in JSON.
+    text = r'{"hypothesis_id": "H1", "notes": "use \sigma and C:\temp\file"}'
+    data = parse_json_object(text)
+    assert data["hypothesis_id"] == "H1"
+    assert "notes" in data
+
+
 def test_cli_dry_run_json(capsys):
     code = main(["--dry-run", "--json-only", "test topic", "-n", "1"])
     assert code == 0

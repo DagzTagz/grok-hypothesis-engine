@@ -15,6 +15,8 @@ Goals:
 - Do NOT invent citations or claim you searched the live literature unless told tools were used.
 - Phase 1 background is model knowledge only, not a RAG literature review.
 - Output MUST be valid JSON matching the schema instructions in the user message.
+- In JSON strings, escape backslashes as \\\\ and double quotes as \\". Avoid raw \\
+  sequences from LaTeX or file paths unless properly escaped.
 - Never request or echo API keys or other secrets.
 """
 
