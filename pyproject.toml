@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dagztagz-hypothesis-engine"
-version = "0.1.0"
-description = "DagzTagz Hypothesis Engine — generate, adversarially verify, and suggest tests for scientific hypotheses (Phase 1 MVP). Powered by Grok (xAI)."
+version = "0.2.0"
+description = "DagzTagz Hypothesis Engine — generate, multi-check verify, and suggest richer tests for scientific hypotheses (Phase 2, iterative). Powered by Grok (xAI)."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"
@@ -63,6 +63,7 @@ include = [
   "/README.md",
   "/LICENSE",
   "/SECURITY.md",
+  "/CHANGELOG.md",
   "/CONTRIBUTING.md",
   "/getting-started.md",
 ]

@@ -1,9 +1,10 @@
-"""Command-line interface for the Phase 1 MVP."""
+"""Command-line interface for the hypothesis engine."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -15,6 +16,9 @@ from rich.table import Table
 from hypothesis_engine import __version__
 from hypothesis_engine.audit import AuditEncryptionUnavailable, topic_audit_fields
 from hypothesis_engine.workflow import bundle_to_json, estimate_api_calls, run_workflow
+
+# Owner read/write only — avoid group/other-readable research outputs on shared hosts.
+_PRIVATE_FILE_MODE = 0o600
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -160,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
 
     payload = bundle_to_json(bundle)
     if args.output:
-        args.output.write_text(payload + "\n", encoding="utf-8")
+        _write_private_text(args.output, payload + "\n")
 
     _audit(
         args.audit_log,
@@ -315,6 +319,27 @@ def _friendly_error(exc: BaseException) -> str:
     return f"{name}: {text}"
 
 
+def _chmod_private(path: Path) -> None:
+    """Best-effort owner-only mode (ignore if OS/filesystem disallows)."""
+    try:
+        os.chmod(path, _PRIVATE_FILE_MODE)
+    except OSError:
+        pass
+
+
+def _write_private_text(path: Path, text: str) -> None:
+    """Write/replace a file as mode 0600 (not group/world-readable)."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    fd = os.open(path, flags, _PRIVATE_FILE_MODE)
+    # fdopen takes ownership of fd (closes it when the with-block ends).
+    with os.fdopen(fd, "w", encoding="utf-8") as fh:
+        fh.write(text)
+    # Existing files keep prior mode on open; re-tighten after write.
+    _chmod_private(path)
+
+
 def _audit(path: Path | None, event: dict) -> None:
     if path is None:
         return
@@ -322,9 +347,15 @@ def _audit(path: Path | None, event: dict) -> None:
         "ts": datetime.now(UTC).isoformat(),
         **event,
     }
+    path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    # Create new audit files as 0600; re-tighten each append (covers old 0644/0664 logs).
+    if not path.exists():
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, _PRIVATE_FILE_MODE)
+        os.close(fd)
     with path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    _chmod_private(path)
 
 
 def _print_human(console: Console, bundle: object) -> None:

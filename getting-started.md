@@ -149,6 +149,18 @@ You will be asked to type **`YES`** to confirm charges (an estimated API call co
 
 An audit log is **optional**. If you never pass `--audit-log`, no audit file is written.
 
+### File permissions (owner-only)
+
+The CLI writes **`--audit-log`** and **`-o` / `--output`** files as mode **`0600`** (owner read/write only — not group or “world” readable). That reduces casual reads by other accounts on a shared machine or multi-user VM.
+
+If you already have older files from before this behavior:
+
+```bash
+chmod 600 audit.jsonl out.json   # only the files you care about
+```
+
+Same idea as `chmod 600 .env`. This is local OS hygiene, not encryption.
+
 ### Important: this is a **local privacy policy choice**
 
 - The audit file stays **on your computer** (unless **you** copy or upload it).

@@ -10,10 +10,11 @@ This is a **DagzTagz** community project. It is **powered by Grok (xAI)** when u
 
 | Version / branch | Supported |
 |------------------|-----------|
-| `main` (latest)  | Yes — security fixes land here |
-| Older commits / forks | Best-effort only; please report against current `main` |
+| `main` / latest tag (currently **0.2.x**) | Yes — security and privacy fixes land here |
+| **0.1.x** and older checkouts / ZIPs | Please **upgrade** — see [Privacy notices for existing installs](#privacy-notices-for-existing-installs) |
+| Forks / unknown snapshots | Best-effort only; report against current `main` |
 
-During Phase 1 there are no numbered releases yet. Treat the tip of `main` as the only supported line.
+This project is **iterative early open source** (pre-1.0). We publish privacy-relevant fixes in [CHANGELOG.md](CHANGELOG.md) so people who already downloaded or cloned can update deliberately.
 
 ---
 
@@ -121,6 +122,29 @@ This safe harbor does **not** cover attacks on infrastructure you do not own, sp
 
 ---
 
+## Privacy notices for existing installs
+
+We use this section for **user-action** privacy fixes (local files, defaults). Product history lives in [CHANGELOG.md](CHANGELOG.md). This is **not** a claim of formal CVE process unless we publish a GitHub Security Advisory.
+
+### 0.2.0 — owner-only permissions for `-o` and `--audit-log` (2026-07-23)
+
+**Who should care:** Anyone who ran the engine **before 0.2.0** and still has local `out.json`, `audit.jsonl`, or other `-o` / `--audit-log` paths on a **shared or multi-user** machine.
+
+**What happened:** Older builds often created those files as **group/world-readable** (typical modes `0644` / `0664`) because of the process umask. That is **not** “public on the internet,” but **other OS accounts on the same host** could read them. Full JSON outputs can contain **plaintext research topics**.
+
+**Fixed in 0.2.0+:** the CLI creates and re-tightens those files to mode **`0600`** (owner only).
+
+**If you already have older files, run:**
+
+```bash
+chmod 600 .env out.json audit.jsonl 2>/dev/null || true
+# include any other paths you passed to -o or --audit-log
+```
+
+Then update your checkout/install to **0.2.0+** (see CHANGELOG). Details: [getting-started.md — File permissions](getting-started.md#file-permissions-owner-only).
+
+---
+
 ## Security practices (maintainers & contributors)
 
 Contributors should:
@@ -130,6 +154,7 @@ Contributors should:
 - Prefer signed commits when practical  
 - Open a **private** report (not a public PR description) if you accidentally committed a secret — then rotate the credential  
 - Review dependency changes carefully as the project grows  
+- Document privacy-relevant default changes in **CHANGELOG.md** and, when users must act on existing files, a short note under **Privacy notices for existing installs** above  
 
 See `.gitignore` for patterns we already try to keep out of the tree.
 

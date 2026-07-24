@@ -61,6 +61,37 @@ def test_audit_log_dry_run(tmp_path: Path, capsys):
     events = [json.loads(line)["event"] for line in lines]
     assert "start" in events
     assert "complete" in events
+    assert log.stat().st_mode & 0o777 == 0o600
+
+
+def test_output_and_audit_files_are_owner_only(tmp_path: Path, capsys):
+    """-o and --audit-log must not be group/world-readable by default."""
+    out = tmp_path / "out.json"
+    log = tmp_path / "audit.jsonl"
+    # Pre-create loose perms; CLI should tighten on write/append.
+    out.write_text("old\n", encoding="utf-8")
+    out.chmod(0o664)
+    log.write_text("", encoding="utf-8")
+    log.chmod(0o664)
+
+    code = main(
+        [
+            "--dry-run",
+            "--json-only",
+            "-n",
+            "1",
+            "-o",
+            str(out),
+            "--audit-log",
+            str(log),
+            "private topic",
+        ]
+    )
+    assert code == 0
+    assert out.stat().st_mode & 0o777 == 0o600
+    assert log.stat().st_mode & 0o777 == 0o600
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["topic"] == "private topic"
 
 
 def test_friendly_error_missing_key():

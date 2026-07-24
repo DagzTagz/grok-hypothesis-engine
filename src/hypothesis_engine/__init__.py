@@ -1,3 +1,3 @@
-"""DagzTagz Hypothesis Engine — Phase 1 MVP package. Powered by Grok (xAI)."""
+"""DagzTagz Hypothesis Engine — iterative open source. Powered by Grok (xAI)."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
